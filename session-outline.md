@@ -57,7 +57,7 @@ Run identical Zava product reviews through gpt-5.4-mini and gpt-5.4 to compare c
 **Lab 6: Deploy a Hosted Agent**
 15 min | Lee Stott
 Content: DEMO
-Package the Zava review moderation logic as a hosted agent using the Microsoft Agent Framework SDK. Review the agent code (`app.py`), Dockerfile, and `agent.yaml` manifest. Deploy to Foundry Agent Service with `azd up` (builds container in ACR, deploys to managed infrastructure). Test the live agent via CLI (`azd ai agent invoke`) and the Foundry Playground.
+Package the Zava review moderation logic as a hosted agent using the Microsoft Agent Framework SDK. Review the agent code (`app.py`), Dockerfile, and `agent.yaml` manifest. Deploy to Foundry Agent Service with `azd up` (builds container in ACR, deploys to managed infrastructure). Test the live agent via CLI (`azd ai agent invoke --protocol responses`) and the Foundry Playground.
 
 **Lab 7: Summary, Key Takeaways, Q&A, and Next Steps**
 5 min | Lee Stott
