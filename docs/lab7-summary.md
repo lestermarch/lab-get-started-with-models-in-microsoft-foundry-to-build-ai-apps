@@ -199,7 +199,7 @@ A complete reference of every CLI command used across the workshop:
 | azd up | 6 | Provision + build + deploy |
 | azd deploy | 6 | Rebuild and redeploy |
 | azd ai agent show | 6 | Check agent status |
-| azd ai agent invoke | 6 | Send message to agent |
+| azd ai agent invoke --protocol responses | 6 | Send message to agent |
 | azd ai agent monitor | 6 | Stream agent logs |
 | azd down | Cleanup | Delete all resources |
 

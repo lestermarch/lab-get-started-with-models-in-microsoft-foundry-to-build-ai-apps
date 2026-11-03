@@ -39,9 +39,9 @@ Labs 3-4 were pure Python -- you wrote a script, ran it locally, and saw output 
 |---|---|---|
 | **Docker container** | Your agent code is packaged into a portable image | **azd up** builds it for you -- you do not write or run any Docker commands |
 | **Azure Container Registry (ACR)** | Cloud storage for container images | Already provisioned in Lab 2 -- azd pushes to it automatically |
-| **Hosted agent on Foundry** | A persistent REST API running your moderation logic | **azd up** deploys it; **azd ai agent invoke** calls it |
+| **Hosted agent on Foundry** | A persistent REST API running your moderation logic | **azd up** deploys it; **azd ai agent invoke --protocol responses** calls it |
 
-The bottom line: you will edit zero infrastructure files. The commands are **azd up** (deploy) and **azd ai agent invoke** (test).
+The bottom line: you will edit zero infrastructure files. The commands are **azd up** (deploy) and **azd ai agent invoke --protocol responses** (test).
 
 ---
 
@@ -234,10 +234,10 @@ Expected: "classification": "UNSAFE"
 
 ### Alternatively, Use the CLI
 
-If you prefer, use **azd ai agent invoke** with the **--local** flag:
+If you prefer, use **azd ai agent invoke** with the **--local** and **--protocol responses** flags:
 
 ```bash
-azd ai agent invoke --local "The cabinet hardware feels cheap for the price Zava is charging"
+azd ai agent invoke --local "The cabinet hardware feels cheap for the price Zava is charging" --protocol responses
 ```
 
 > **Troubleshooting:** If you see ImportError, make sure your virtual environment is activated and the packages from src/agent/requirements.txt are installed:
@@ -341,7 +341,7 @@ Status   active
 Send messages to your hosted agent directly from the CLI:
 
 ```bash
-azd ai agent invoke "Love this cordless drill! Battery lasts all day and the torque is impressive."
+azd ai agent invoke "Love this cordless drill! Battery lasts all day and the torque is impressive." --protocol responses
 ```
 
 ### Expected Output
@@ -357,23 +357,23 @@ azd ai agent invoke "Love this cordless drill! Battery lasts all day and the tor
 Try more examples:
 
 ```bash
-azd ai agent invoke "This paint is garbage and whoever designed it should be fired"
+azd ai agent invoke "This paint is garbage and whoever designed it should be fired" --protocol responses
 ```
 
 ```bash
-azd ai agent invoke "Zava employees are the worst people on earth"
+azd ai agent invoke "Zava employees are the worst people on earth" --protocol responses
 ```
 
 ```bash
-azd ai agent invoke "Does this deck stain work on pressure-treated lumber?"
+azd ai agent invoke "Does this deck stain work on pressure-treated lumber?" --protocol responses
 ```
 
 ### Conversations
 
-By default, **azd ai agent invoke** reuses the same conversation session. To start fresh:
+By default, **azd ai agent invoke --protocol responses** reuses the same conversation session. To start fresh:
 
 ```bash
-azd ai agent invoke --new-session "Fresh conversation here"
+azd ai agent invoke --new-session "Fresh conversation here" --protocol responses
 ```
 
 ---
@@ -473,7 +473,7 @@ To monitor a specific interaction, first create a session and invoke the agent:
 ```bash
 SESSION_ID=$(uuidgen)
 
-azd ai agent invoke "Hello" --session-id $SESSION_ID
+azd ai agent invoke "Hello" --session-id $SESSION_ID --protocol responses
 ```
 
 **PowerShell (Windows):**
@@ -481,7 +481,7 @@ azd ai agent invoke "Hello" --session-id $SESSION_ID
 ```powershell
 $SESSION_ID = [System.Guid]::NewGuid().ToString()
 
-azd ai agent invoke "Hello" --session-id $SESSION_ID
+azd ai agent invoke "Hello" --session-id $SESSION_ID --protocol responses
 ```
 
 Then stream logs for that session in real time:
@@ -547,8 +547,8 @@ This removes:
 | azd up | Provision + build + deploy (all-in-one) |
 | azd deploy | Rebuild and redeploy (skip provisioning) |
 | azd ai agent show | Check agent status |
-| azd ai agent invoke "msg" | Send a message to the agent |
-| azd ai agent invoke --local "msg" | Test against a locally running agent |
+| azd ai agent invoke "msg" --protocol responses | Send a message to the agent |
+| azd ai agent invoke --local "msg" --protocol responses | Test against a locally running agent |
 | azd ai agent run | Run the agent locally for development |
 | azd ai agent monitor | Stream container logs |
 | azd down | Delete all resources |
@@ -564,7 +564,7 @@ Want to extend the agent before wrapping up? Try adding a fourth classification 
 3. **Redeploy** -- run azd deploy to push your changes to the hosted agent
 4. **Test** -- invoke the agent with a spammy review:
    ```bash
-   azd ai agent invoke "Buy cheap sunglasses at www.example.com! 50% off today only!"
+   azd ai agent invoke "Buy cheap sunglasses at www.example.com! 50% off today only!" --protocol responses
    ```
 5. Verify the response includes "classification": "SPAM"
 
@@ -577,7 +577,7 @@ This exercise reinforces the full edit → deploy → test cycle you'd use in pr
 Before moving on, confirm:
 
 - [ ] azd ai agent show --output table shows **Status: active**
-- [ ] azd ai agent invoke "Love this cordless drill!" returns a JSON response with "classification": "SAFE"
+- [ ] azd ai agent invoke "Love this cordless drill!" --protocol responses returns a JSON response with "classification": "SAFE"
 - [ ] The agent is visible in the Foundry Playground at https://ai.azure.com
 
 If the agent status shows an error, check the logs with azd **ai agent monitor** for details.

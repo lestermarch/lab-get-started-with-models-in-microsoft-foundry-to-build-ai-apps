@@ -92,7 +92,6 @@ def test_file_structure():
         "src/agent/app.py",
         "src/agent/Dockerfile",
         "src/agent/requirements.txt",
-        "src/agent/agent.yaml",
         # Tests
         "src/tests/TESTING.md",
         "src/tests/validate_lab.py",
@@ -386,24 +385,12 @@ def test_agent_service():
     except FileNotFoundError:
         record("Dockerfile exists", "FAIL")
 
-    # Check agent.yaml manifest
+    # The agent service configuration is maintained in the root azure.yaml.
     manifest_path = REPO_ROOT / "src/agent/agent.yaml"
-    try:
-        content = manifest_path.read_text(encoding="utf-8")
-        if "hosted" in content:
-            record("agent.yaml kind: hosted", "PASS")
-        else:
-            record("agent.yaml kind: hosted", "FAIL")
-        if "responses" in content:
-            record("agent.yaml protocol: responses", "PASS")
-        else:
-            record("agent.yaml protocol: responses", "FAIL")
-        if "      version: \"1.0.0\"" in content or "      version: '1.0.0'" in content:
-            record("agent.yaml responses version: 1.0.0", "PASS")
-        else:
-            record("agent.yaml responses version: 1.0.0", "FAIL")
-    except FileNotFoundError:
-        record("agent.yaml exists", "FAIL")
+    if not manifest_path.exists():
+        record("Superseded agent.yaml removed", "PASS")
+    else:
+        record("Superseded agent.yaml removed", "FAIL", "Configuration belongs in azure.yaml")
 
     # Check agent requirements have hosting adapter and framework packages
     req_path = REPO_ROOT / "src/agent/requirements.txt"
