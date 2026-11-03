@@ -150,7 +150,7 @@ If an attendee leaves with only one of these, make it #1 (Foundry + OpenAI SDK p
   - Explain what `azd` is doing (build → push to ACR → create/update agent → wire RBAC).
   - Reinforce: *the developer didn't write any infra — `azd` did.*
 - When deployment finishes, invoke the agent:
-  - Via CLI: `azd ai agent invoke`
+  - Via CLI: `azd ai agent invoke --protocol responses`
   - Via the Foundry **Playground** in the portal — show the live request/response
 - Optional: tail logs from the agent to show observability.
 

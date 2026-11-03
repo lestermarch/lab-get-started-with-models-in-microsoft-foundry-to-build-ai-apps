@@ -1217,10 +1217,10 @@ Invoke-RestMethod -Uri "http://localhost:8088/responses" `
 
 ### Send test requests with the CLI
 
-If you prefer, use **azd ai agent invoke** with the **--local** flag:
+If you prefer, use **azd ai agent invoke** with the **--local** and **--protocol responses** flags:
 
 ```powershell
-azd ai agent invoke --local "The cabinet hardware feels cheap for the price Zava is charging"
+azd ai agent invoke --local "The cabinet hardware feels cheap for the price Zava is charging" --protocol responses
 ```
 
 Once you've confirmed the agent works locally, proceed to cloud deployment.
@@ -1266,7 +1266,7 @@ Status   active
 Send messages to your hosted agent directly from the CLI:
 
 ```powershell
-azd ai agent invoke "Love this cordless drill! Battery lasts all day and the torque is impressive."
+azd ai agent invoke "Love this cordless drill! Battery lasts all day and the torque is impressive." --protocol responses
 ```
 
 ### Expected output
@@ -1282,23 +1282,23 @@ azd ai agent invoke "Love this cordless drill! Battery lasts all day and the tor
 Try more examples:
 
 ```powershell
-azd ai agent invoke "This paint is garbage and whoever designed it should be fired"
+azd ai agent invoke "This paint is garbage and whoever designed it should be fired" --protocol responses
 ```
 
 ```powershell
-azd ai agent invoke "Zava employees are the worst people on earth"
+azd ai agent invoke "Zava employees are the worst people on earth" --protocol responses
 ```
 
 ```powershell
-azd ai agent invoke "Does this deck stain work on pressure-treated lumber?"
+azd ai agent invoke "Does this deck stain work on pressure-treated lumber?" --protocol responses
 ```
 
 ### Conversations
 
-By default, **azd ai agent invoke** reuses the same conversation session. To start fresh:
+By default, **azd ai agent invoke --protocol responses** reuses the same conversation session. To start fresh:
 
 ```powershell
-azd ai agent invoke --new-session "Fresh conversation here"
+azd ai agent invoke --new-session "Fresh conversation here" --protocol responses
 ```
 
 ---
@@ -1380,7 +1380,7 @@ To monitor a specific interaction, first create a session and invoke the agent:
 ```powershell
 $SESSION_ID = [System.Guid]::NewGuid().ToString()
 
-azd ai agent invoke "Hello" --session-id $SESSION_ID
+azd ai agent invoke "Hello" --session-id $SESSION_ID --protocol responses
 ```
 
 Then stream logs for that session in real time:
@@ -1421,8 +1421,8 @@ azd ai agent monitor --follow
 | azd up | Provision + build + deploy (all-in-one) |
 | azd deploy | Rebuild and redeploy (skip provisioning) |
 | azd ai agent show | Check agent status |
-| azd ai agent invoke "msg" | Send a message to the agent |
-| azd ai agent invoke --local "msg" | Test against a locally running agent |
+| azd ai agent invoke "msg" --protocol responses | Send a message to the agent |
+| azd ai agent invoke --local "msg" --protocol responses | Test against a locally running agent |
 | azd ai agent run | Run the agent locally for development |
 | azd ai agent monitor | Stream container logs |
 | azd down | Delete all resources |
@@ -1439,7 +1439,7 @@ Want to extend the agent before wrapping up? Try adding a fourth classification 
 4. **Test** — invoke the agent with a spammy review:
 
    ```powershell
-   azd ai agent invoke "Buy cheap sunglasses at www.example.com! 50% off today only!"
+   azd ai agent invoke "Buy cheap sunglasses at www.example.com! 50% off today only!" --protocol responses
    ```
 5. Verify the response includes **"classification": "SPAM"**
 
